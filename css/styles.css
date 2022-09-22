@@ -1,0 +1,102 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: white;
+}
+
+.container {
+  align-items: center;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100vh;
+  justify-content: center;
+}
+
+.setup-menu {
+  align-items: center;
+  display: flex;
+  gap: 2.5em;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.setup-header {
+  font-size: 5rem;
+  margin-bottom: 1em;
+}
+
+.start-game-button {
+  background-color: white;
+  border: none;
+  border-radius: 0.85em;
+  cursor: pointer;
+  padding: 1em 2em;
+  width: 40%;
+}
+
+.player-turn {
+  color: white;
+}
+
+.game-board {
+  background-color: white;
+  border: 0.5px solid red;
+  display: grid;
+  gap: 0;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  height: 500px;
+  width: 500px;
+}
+
+.board-space {
+  border: 0.5px solid red;
+  height: 100%;
+  width: 100%;
+}
+
+.board-space:hover {
+  cursor: pointer;
+  opacity: 0.2;
+}
+
+.player1-turn:hover {
+  background-color: blue;
+}
+
+.player2-turn:hover {
+  background-color: green;
+}
+
+.player1-selected-board-space,
+.player2-selected-board-space {
+  background-color: blue;
+  border: 0.5px solid white;
+}
+
+.player2-selected-board-space {
+  background-color: green;
+}
+
+.player1-selected-board-space:hover,
+.player2-selected-board-space:hover {
+  background-color: red;
+}
+
+.game-over {
+  display: none;
+}
+
+.winner-text {
+  font-size: 5rem;
+}
+
+.hide {
+  display: none;
+}
