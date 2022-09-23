@@ -2,7 +2,7 @@ class Game {
   constructor(player1, player2) {
     this.player1 = player1;
     this.player2 = player2;
-    this.container = document.getElementById("container");
+    this.currentPlayer = player1;
     this.announcementHeader = document.getElementById("player-turn");
     this.gameBoard = this.setUpGameBoard();
     this.boardSpaces = Array.from(
@@ -14,9 +14,11 @@ class Game {
     this.player1SelectedSpaces = [];
     this.player2SelectedSpaces = [];
     this.winner = "";
+    this.selectBoardSpace = this.selectBoardSpace.bind(this); // .bind(this) ensures that the definition of "this" inside selectBoardSpace will always refer to the instance of the Game object, as opposed to the element that the eventListener was installed on.
   }
 
   setUpGameBoard() {
+    const container = document.getElementById("container");
     const gameBoard = document.createElement("main");
     gameBoard.classList.add("game-board");
     gameBoard.setAttribute("id", "game-board");
@@ -27,8 +29,15 @@ class Game {
       boardSpace.setAttribute("id", `_${i}`);
       gameBoard.appendChild(boardSpace);
     }
-    this.container.append(gameBoard);
+    container.append(gameBoard);
     return gameBoard;
+  }
+
+  startGame() {
+    this.boardSpaces.forEach((boardSpace) => {
+      boardSpace.addEventListener("click", this.selectBoardSpace);
+    });
+    this.announcePlayerTurn(this.currentPlayer);
   }
 
   announcePlayerTurn(currentPlayer) {
@@ -44,6 +53,30 @@ class Game {
     });
   }
 
+  selectBoardSpace(e) {
+    const selectedBoardSpace = e.target;
+    this.selectedSpaces.push(selectedBoardSpace.getAttribute("id"));
+    if (this.currentPlayer === this.player1) {
+      selectedBoardSpace.classList.add("player1-selected-board-space");
+      this.player1SelectedSpaces.push(selectedBoardSpace.getAttribute("id"));
+      this.currentPlayer = this.player2;
+    } else {
+      selectedBoardSpace.classList.add("player2-selected-board-space");
+      this.player2SelectedSpaces.push(selectedBoardSpace.getAttribute("id"));
+      this.currentPlayer = this.player1;
+    }
+    selectedBoardSpace.removeEventListener("click", this.selectBoardSpace);
+    this.winner = this.determineWinner();
+    if (
+      this.boardSpaces.length === this.selectedSpaces.length ||
+      this.winner !== ""
+    ) {
+      this.gameOver();
+    } else {
+      this.announcePlayerTurn(this.currentPlayer);
+    }
+  }
+
   determineWinner() {
     const winningPossibilities = [
       ["_0", "_1", "_2"],
@@ -55,7 +88,7 @@ class Game {
       ["_0", "_4", "_8"],
       ["_2", "_4", "_6"],
     ];
-
+    let winner = "";
     winningPossibilities.forEach((possibility) => {
       const player1HasWon = possibility.every((value) => {
         return this.player1SelectedSpaces.includes(value);
@@ -64,20 +97,17 @@ class Game {
         return this.player2SelectedSpaces.includes(value);
       });
       if (player1HasWon) {
-        this.winner = this.player1;
-        this.gameOver();
+        winner = this.player1;
       } else if (player2HasWon) {
-        this.winner = this.player2;
-        this.gameOver();
+        winner = this.player2;
       }
     });
+    return winner;
   }
 
   gameOver() {
-    console.log("winner is: ", this.winner);
-    console.log("the gameBoard is: ", this.gameBoard);
     if (this.winner === "") {
-      this.announcementHeader.innerText = "Draw!";
+      this.announcementHeader.innerText = "Draw! 🫱🏻‍🫲🏾";
     } else {
       this.announcementHeader.innerText = `The winner is ${this.winner}! 🏆`;
     }
@@ -86,64 +116,20 @@ class Game {
   }
 }
 
-this.container.append(createSetupMenu());
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("container").append(createSetupMenu());
 
-const startGameButton = document.getElementById("launch-button");
+  const startGameButton = document.getElementById("launch-button");
 
-startGameButton.addEventListener("click", () => {
-  const player1 = document.getElementById("player1-name").value;
-  const player2 = document.getElementById("player2-name").value;
-  const setupMenu = document.getElementById("setup-menu");
-  setupMenu.classList.add("hide");
-  const board = new Game(player1, player2);
+  startGameButton.addEventListener("click", () => {
+    const player1 = document.getElementById("player1-name").value;
+    const player2 = document.getElementById("player2-name").value;
+    const setupMenu = document.getElementById("setup-menu");
+    setupMenu.classList.add("hide");
+    const board = new Game(player1, player2);
 
-  let currentPlayer = board.player1;
-  board.boardSpaces.forEach((boardSpace) => {
-    boardSpace.addEventListener("click", selectBoardSpace);
+    board.startGame();
   });
-
-  board.announcePlayerTurn(currentPlayer);
-
-  // We want the game to last for as long as there is no winner and there are board spaces remaining.
-
-  // Each player turn should last one click event.  As soon as a player selects a space, that space needs to be added to
-  // board.selectedSpaces and to that player's selected spaces array
-
-  // as each player clicks a square, the turn switches to the opposite player.
-
-  function selectBoardSpace(e) {
-    const selectedBoardSpace = e.target;
-    selectedBoardSpace.classList.add("selected-space");
-    board.selectedSpaces.push(selectedBoardSpace.getAttribute("id"));
-    console.log("selected spaces: ", board.selectedSpaces);
-    if (currentPlayer === board.player1) {
-      console.log("player 1 selected a space.  It should turn blue.");
-      selectedBoardSpace.classList.add("player1-selected-board-space");
-      board.player1SelectedSpaces.push(selectedBoardSpace.getAttribute("id"));
-      console.log(
-        "places player 1 has selected: ",
-        board.player1SelectedSpaces
-      );
-      currentPlayer = board.player2;
-    } else {
-      console.log("player 1 selected a space.  It should turn green.");
-      selectedBoardSpace.classList.add("player2-selected-board-space");
-      board.player2SelectedSpaces.push(selectedBoardSpace.getAttribute("id"));
-      currentPlayer = board.player1;
-    }
-    selectedBoardSpace.removeEventListener("click", selectBoardSpace);
-
-    // determining if we have a winner
-    board.determineWinner();
-    if (
-      board.winner === "" &&
-      board.boardSpaces.length === board.selectedSpaces.length
-    ) {
-      board.gameOver();
-    } else if (board.winner === "") {
-      board.announcePlayerTurn(currentPlayer);
-    }
-  }
 });
 
 function createSetupMenu() {
