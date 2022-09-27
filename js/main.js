@@ -3,7 +3,7 @@ class Game {
     this.player1 = player1;
     this.player2 = player2;
     this.currentPlayer = player1;
-    this.announcementHeader = document.getElementById("player-turn");
+    this.announcementHeader = document.getElementById("main-header");
     this.gameBoard = this.setUpGameBoard();
     this.boardSpaces = Array.from(
       document.getElementsByClassName("board-space")
@@ -41,7 +41,7 @@ class Game {
   }
 
   announcePlayerTurn(currentPlayer) {
-    this.announcementHeader.innerText = `It's ${currentPlayer}'s turn!`;
+    this.announcementHeader.innerText = `${currentPlayer}'s turn!`;
     this.boardSpaces.forEach((boardSpace) => {
       if (currentPlayer === this.player1) {
         boardSpace.classList.add("player1-turn");
@@ -106,13 +106,14 @@ class Game {
   }
 
   gameOver() {
+    const container = document.getElementById("container");
     if (this.winner === "") {
       this.announcementHeader.innerText = "Draw! 🫱🏻‍🫲🏾";
     } else {
-      this.announcementHeader.innerText = `The winner is ${this.winner}! 🏆`;
+      this.announcementHeader.innerText = `${this.winner} Wins! 🏆`;
     }
     this.gameBoard.classList.add("game-over");
-    this.announcementHeader.classList.add("winner-text");
+    container.classList.add("display-winner");
   }
 }
 
@@ -137,17 +138,26 @@ function createSetupMenu() {
   setupMenu.setAttribute("id", "setup-menu");
   setupMenu.classList.add("setup-menu");
 
-  const setupHeader = document.createElement("h1");
-  setupHeader.classList.add("setup-header");
-  setupHeader.innerText = "Tic Tac Toe";
+  // const setupHeader = document.createElement("h1");
+  // setupHeader.classList.add("setup-header");
+  // setupHeader.innerText = "Tic Tac Toe";
+
+  const playerInputContainer = document.createElement("div");
+  playerInputContainer.classList.add("player-select-container");
 
   const player1Input = document.createElement("input");
   player1Input.setAttribute("placeholder", "Player 1 Name");
   player1Input.setAttribute("id", "player1-name");
+  player1Input.setAttribute("value", "Player 1");
+  player1Input.classList.add("player-select-input");
 
   const player2Input = document.createElement("input");
   player2Input.setAttribute("placeholder", "Player 2 Name");
   player2Input.setAttribute("id", "player2-name");
+  player2Input.setAttribute("value", "Player 2");
+  player2Input.classList.add("player-select-input");
+
+  playerInputContainer.append(player1Input, player2Input);
 
   const startGameButton = document.createElement("button");
   startGameButton.classList.add("start-game-button");
@@ -155,6 +165,7 @@ function createSetupMenu() {
   startGameButton.setAttribute("id", "launch-button");
   startGameButton.setAttribute("name", "launch-button");
   startGameButton.innerText = "Start Game!";
-  setupMenu.append(setupHeader, player1Input, player2Input, startGameButton);
+  // setupMenu.append(setupHeader, playerInputContainer, startGameButton);
+  setupMenu.append(playerInputContainer, startGameButton);
   return setupMenu;
 }

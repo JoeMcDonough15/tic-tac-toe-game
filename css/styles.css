@@ -1,3 +1,7 @@
+:root {
+  --curved-edge: 8px;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -5,58 +9,103 @@
 }
 
 body {
+  background-color: black;
   color: white;
+  font-family: "Rubik", sans-serif;
+  font-weight: 300;
 }
 
 .container {
   align-items: center;
-  background-color: black;
   display: flex;
   flex-direction: column;
-  gap: 20px;
   height: 100vh;
   justify-content: center;
+  margin: auto;
+  max-width: 360px;
+  padding: 2.5em;
+}
+
+.display-winner {
+  justify-content: center;
+}
+
+.setup-menu,
+.start-game-button,
+.player-select-input {
+  border-radius: var(--curved-edge);
 }
 
 .setup-menu {
   align-items: center;
+  background-color: #333;
+  border-radius: var(--curved-edge);
   display: flex;
-  gap: 2.5em;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 3.75em 2.5em;
+  width: 100%;
 }
 
-.setup-header {
-  font-size: 5rem;
+.main-header {
+  color: #ccc;
+  font-size: 2.5rem;
+  height: 100px;
   margin-bottom: 1em;
+  text-align: center;
+}
+
+.main-header,
+.player-select-container,
+.start-game-button {
+  min-width: max-content;
+  width: 100%;
+}
+
+.player-select-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.player-select-input,
+.start-game-button {
+  background-color: #ccc;
+  border: none;
+  font: inherit;
+  font-size: 1.125rem;
+}
+
+.player-select-input {
+  padding: 0.44em;
+}
+
+.player-select-input:focus-visible {
+  outline: none;
 }
 
 .start-game-button {
-  background-color: white;
-  border: none;
-  border-radius: 0.85em;
   cursor: pointer;
-  padding: 1em 2em;
-  width: 40%;
+  font-weight: 700;
+  margin-top: 6em;
+  padding: 1em 3em;
 }
 
-.player-turn {
-  color: white;
+.game-board,
+.board-space {
+  border: 0.5px solid black;
 }
 
 .game-board {
   background-color: white;
-  border: 0.5px solid red;
   display: grid;
-  gap: 0;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-template-columns: 1fr 1fr 1fr;
-  height: 500px;
-  width: 500px;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  height: 280px;
+  width: 280px;
 }
 
 .board-space {
-  border: 0.5px solid red;
   height: 100%;
   width: 100%;
 }
@@ -74,10 +123,21 @@ body {
   background-color: green;
 }
 
-.player1-selected-board-space,
-.player2-selected-board-space {
+.player1-turn-header,
+.player2-turn-header {
+  opacity: 0.7;
+}
+
+.player1-turn-header {
+  color: blue;
+}
+
+.player2-turn-header {
+  color: green;
+}
+
+.player1-selected-board-space {
   background-color: blue;
-  border: 0.5px solid white;
 }
 
 .player2-selected-board-space {
@@ -89,14 +149,27 @@ body {
   background-color: red;
 }
 
+.hide,
 .game-over {
   display: none;
 }
 
-.winner-text {
-  font-size: 5rem;
-}
+@media (min-width: 700px) {
+  .container {
+    max-width: 800px;
+    padding: 2.5em 5em;
+  }
 
-.hide {
-  display: none;
+  .main-header {
+    font-size: 4rem;
+  }
+
+  .setup-menu {
+    width: 70%;
+  }
+
+  .game-board {
+    height: 400px;
+    width: 400px;
+  }
 }
