@@ -26,10 +26,6 @@ body {
   padding: 2.5em;
 }
 
-.display-winner {
-  justify-content: center;
-}
-
 .setup-menu,
 .start-game-button,
 .player-select-input {

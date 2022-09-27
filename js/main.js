@@ -106,14 +106,12 @@ class Game {
   }
 
   gameOver() {
-    const container = document.getElementById("container");
     if (this.winner === "") {
       this.announcementHeader.innerText = "Draw! 🫱🏻‍🫲🏾";
     } else {
       this.announcementHeader.innerText = `${this.winner} Wins! 🏆`;
     }
     this.gameBoard.classList.add("game-over");
-    container.classList.add("display-winner");
   }
 }
 
@@ -138,10 +136,6 @@ function createSetupMenu() {
   setupMenu.setAttribute("id", "setup-menu");
   setupMenu.classList.add("setup-menu");
 
-  // const setupHeader = document.createElement("h1");
-  // setupHeader.classList.add("setup-header");
-  // setupHeader.innerText = "Tic Tac Toe";
-
   const playerInputContainer = document.createElement("div");
   playerInputContainer.classList.add("player-select-container");
 
@@ -165,7 +159,7 @@ function createSetupMenu() {
   startGameButton.setAttribute("id", "launch-button");
   startGameButton.setAttribute("name", "launch-button");
   startGameButton.innerText = "Start Game!";
-  // setupMenu.append(setupHeader, playerInputContainer, startGameButton);
   setupMenu.append(playerInputContainer, startGameButton);
+
   return setupMenu;
 }
