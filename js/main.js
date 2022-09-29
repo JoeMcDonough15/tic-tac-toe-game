@@ -57,14 +57,15 @@ class Game {
     const selectedBoardSpace = e.target;
     this.selectedSpaces.push(selectedBoardSpace.getAttribute("id"));
     if (this.currentPlayer === this.player1) {
-      selectedBoardSpace.classList.add("player1-selected-board-space");
+      this.placeGamePiece("x", selectedBoardSpace);
       this.player1SelectedSpaces.push(selectedBoardSpace.getAttribute("id"));
       this.currentPlayer = this.player2;
     } else {
-      selectedBoardSpace.classList.add("player2-selected-board-space");
+      this.placeGamePiece("o", selectedBoardSpace);
       this.player2SelectedSpaces.push(selectedBoardSpace.getAttribute("id"));
       this.currentPlayer = this.player1;
     }
+    selectedBoardSpace.classList.add("selected");
     selectedBoardSpace.removeEventListener("click", this.selectBoardSpace);
     this.winner = this.determineWinner();
     if (
@@ -75,6 +76,13 @@ class Game {
     } else {
       this.announcePlayerTurn(this.currentPlayer);
     }
+  }
+
+  placeGamePiece(piece, selectedBoardSpace) {
+    const gamePiece = document.createElement("img");
+    gamePiece.setAttribute("src", `./images/${piece}.png`);
+    gamePiece.setAttribute("alt", `${piece} game piece`);
+    selectedBoardSpace.append(gamePiece);
   }
 
   determineWinner() {
@@ -121,11 +129,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const startGameButton = document.getElementById("launch-button");
 
   startGameButton.addEventListener("click", () => {
-    const player1 = document.getElementById("player1-name").value;
-    const player2 = document.getElementById("player2-name").value;
+    const player1 = document.getElementById("player1-name");
+    const player2 = document.getElementById("player2-name");
+    if (player1.getAttribute("value") === null) {
+      player1.setAttribute("value", "Player 1");
+    }
+    if (player2.getAttribute("value") === null) {
+      player2.setAttribute("value", "Player 2");
+    }
     const setupMenu = document.getElementById("setup-menu");
     setupMenu.classList.add("hide");
-    const board = new Game(player1, player2);
+    const board = new Game(player1.value, player2.value);
 
     board.startGame();
   });
@@ -142,13 +156,11 @@ function createSetupMenu() {
   const player1Input = document.createElement("input");
   player1Input.setAttribute("placeholder", "Player 1 Name");
   player1Input.setAttribute("id", "player1-name");
-  player1Input.setAttribute("value", "Player 1");
   player1Input.classList.add("player-select-input");
 
   const player2Input = document.createElement("input");
   player2Input.setAttribute("placeholder", "Player 2 Name");
   player2Input.setAttribute("id", "player2-name");
-  player2Input.setAttribute("value", "Player 2");
   player2Input.classList.add("player-select-input");
 
   playerInputContainer.append(player1Input, player2Input);
