@@ -8,9 +8,7 @@ class Game {
     this.boardSpaces = Array.from(
       document.getElementsByClassName("board-space")
     );
-    this.selectedSpaces = Array.from(
-      document.getElementsByClassName("selected-board-space")
-    );
+    this.selectedSpaces = [];
     this.player1SelectedSpaces = [];
     this.player2SelectedSpaces = [];
     this.winner = "";
@@ -56,6 +54,7 @@ class Game {
   selectBoardSpace(e) {
     const selectedBoardSpace = e.target;
     this.selectedSpaces.push(selectedBoardSpace.getAttribute("id"));
+    selectedBoardSpace.classList.add("selected");
     if (this.currentPlayer === this.player1) {
       this.placeGamePiece("x", selectedBoardSpace);
       this.player1SelectedSpaces.push(selectedBoardSpace.getAttribute("id"));
@@ -65,7 +64,6 @@ class Game {
       this.player2SelectedSpaces.push(selectedBoardSpace.getAttribute("id"));
       this.currentPlayer = this.player1;
     }
-    selectedBoardSpace.classList.add("selected");
     selectedBoardSpace.removeEventListener("click", this.selectBoardSpace);
     this.winner = this.determineWinner();
     if (
