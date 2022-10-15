@@ -125,7 +125,7 @@ img {
   background-color: green;
 }
 
-.selected:hover {
+.selected:active {
   background-color: red;
 }
 
@@ -151,5 +151,9 @@ img {
   .game-board {
     height: 500px;
     width: 500px;
+  }
+
+  .selected:hover {
+    background-color: red;
   }
 }
