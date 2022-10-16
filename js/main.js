@@ -35,6 +35,7 @@ class Game {
     this.boardSpaces.forEach((boardSpace) => {
       boardSpace.addEventListener("click", this.selectBoardSpace);
     });
+    this.announcementHeader.classList.remove("setup-menu-header");
     this.announcePlayerTurn(this.currentPlayer);
   }
 
@@ -80,6 +81,7 @@ class Game {
     const gamePiece = document.createElement("img");
     gamePiece.setAttribute("src", `./images/${piece}.png`);
     gamePiece.setAttribute("alt", `${piece} game piece`);
+    gamePiece.classList.add("gamepiece");
     selectedBoardSpace.append(gamePiece);
   }
 
